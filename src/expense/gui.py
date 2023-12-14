@@ -18,7 +18,6 @@ class Gui:
         self.controller: ExpanseController = ExpanseController()
         self.serializator: ExpenceSerializator = ExpenceSerializator(FILENAME)
         self.analyzer: ExpenseAnalizer = ExpenseAnalizer()
-        self.newgui: NewWindowGui = NewWindowGui()
         self.filename = FILENAME
         self.ts = tk.Tk()
         self.ts.title(title)
@@ -77,10 +76,9 @@ class Gui:
             self.ts, width=6, text="Add", command=self.add_expense
         )
         self.expense_add_button.grid(row=3, column=1, padx=10, pady=10, sticky="w")
-        
+
         self.save_buttom = tk.Button(self.ts, width=6, text="Save", command=self.save)
         self.save_buttom.grid(row=4, column=1, padx=10, pady=10, sticky="w")
-
 
         self.expense_delete_button = tk.Button(
             self.ts, width=6, text="Delete", command=self.delete_expense
@@ -91,13 +89,15 @@ class Gui:
             self.ts, width=6, text="Balance", command=self.balance
         )
         self.expense_balance_button.grid(row=4, column=1, padx=10, pady=10, sticky="e")
-        
+
         self.expense_month_button = tk.Button(
-            self.ts, width=6, text="Month", command=self.new_window        #remeber to add command
+            self.ts,
+            width=6,
+            text="Month",
+            command=self.new_window,  # remeber to add command
         )
         self.expense_month_button.grid(row=5, column=1, padx=10, pady=10, sticky="e")
-        
-        
+
         self.expense_list_box = tk.Listbox(
             self.ts, width=50, height=10, foreground="white"
         )
@@ -160,8 +160,5 @@ class Gui:
         balance = self.analyzer.get_balance(self.controller.expenses)
         messagebox.showinfo("Balance", f"Your Balance is {balance}")
 
-    
     def new_window(self):
-        self.newgui.new_window()
-
-
+        new_window: NewWindowGui = NewWindowGui(self.controller.expenses)

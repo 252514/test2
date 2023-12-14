@@ -19,5 +19,4 @@ class ExpenseAnalizer:
         for expense in list_expense:
             price = expense.price
             balance += price
-        print(balance)
         return balance
