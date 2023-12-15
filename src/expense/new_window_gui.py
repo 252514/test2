@@ -23,7 +23,7 @@ class NewWindowGui:
             row=0, column=3, rowspan=5, padx=10, pady=10, sticky="nsew"
         )
         self.view_balance = tk.Button(
-            self.window, text="view balance", command=self.show_calendar
+            self.window, text="view balance", command=self.view_month_balance
         )
         self.view_balance.grid(row=0, column=0, padx=10, pady=10)
 
@@ -45,18 +45,25 @@ class NewWindowGui:
         self.calendar_label = ttk.Label(self.window, text="")
         self.calendar_label.grid(row=3, column=1, pady=10, padx=10)
 
-    def show_calendar(self):
+    def view_month_balance(self):
+        self.show_month_balance_label()
+        self.show_month_expenses_list()
+
+    def show_month_balance_label(self):
         self.selected_month = self.month_combobox.get()
         self.selected_year = self.year_combobox.get()
         self.year_number = int(self.selected_year[2:])
         self.month_number = list(calendar.month_name).index(self.selected_month)
-        print(self.year_number, self.month_number)
+        # print(self.year_number, self.month_number)
         # self.cal_text = calendar.month(int(self.selected_year), self.year_number)
         self.list_month = self.analizer.get_month(
             self.controler.expenses, self.month_number, int(self.year_number)
         )
         balance_month = self.analizer.get_balance(self.list_month)
         self.calendar_label.config(text=balance_month)
+
+    def show_month_expenses_list(self):
+        self.expense_list_box_two.delete(0, tk.END)
         for expense in self.list_month:
             self.expense_list_box_two.insert(
                 tk.END, f"{expense.date},{expense.price},{expense.name}"
