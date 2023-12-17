@@ -107,7 +107,7 @@ class Gui:
         self.expense_month_button.grid(row=5, column=1, padx=10, pady=10, sticky="e")
 
         self.expense_list_box = tk.Listbox(
-            self.ts, width=50, height=10
+            self.ts, width=100, height=10
         )
         self.expense_list_box.grid(
             row=0, column=2, rowspan=5, padx=10, pady=10, sticky="nsew"
@@ -135,7 +135,7 @@ class Gui:
                 "Empty", "Error: Descripton, date or expense cannot be empty."
             )
             return
-        elif len(name) > 25:
+        elif len(name) > 35:
             messagebox.showerror("Too much words","Please, describe expense shorter :)")
             return
         try:
