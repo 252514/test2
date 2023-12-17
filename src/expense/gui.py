@@ -30,20 +30,19 @@ class Gui:
 
         style = ttk.Style()
         style.configure(
-            "TLabel", font=("Helvetica", 12), foreground="white", background="#4A4A4A"
+            "TLabel", font=("Helvetica", 12), background="#4A4A4A"
         )
         style.configure(
             "TEntry",
             font=("Helvetica", 12),
             fieldbackground="#666666",
-            foreground="white",
         )
         style.configure(
-            "TButton", font=("Helvetica", 12), background="#66BB6A", foreground="white"
+            "TButton", font=("Helvetica", 12), background="#66BB6A"
         )
 
         self.expense_input_name_label = tk.Label(
-            self.ts, width=10, foreground="white", text="Description:"
+            self.ts, width=10, text="Description:"
         )
         self.expense_input_name_label.grid(
             row=0, column=0, padx=10, pady=10, sticky="w"
@@ -103,12 +102,12 @@ class Gui:
             self.ts,
             width=6,
             text="Month",
-            command=self.new_window,  # remeber to add command
+            command=self.new_window
         )
         self.expense_month_button.grid(row=5, column=1, padx=10, pady=10, sticky="e")
 
         self.expense_list_box = tk.Listbox(
-            self.ts, width=50, height=10, foreground="white"
+            self.ts, width=50, height=10
         )
         self.expense_list_box.grid(
             row=0, column=2, rowspan=5, padx=10, pady=10, sticky="nsew"
@@ -136,6 +135,9 @@ class Gui:
                 "Empty", "Error: Descripton, date or expense cannot be empty."
             )
             return
+        elif len(name) > 25:
+            messagebox.showerror("Too much words","Please, describe expense shorter :)")
+            return
         try:
             check_price(price)
         except Exception:
@@ -151,7 +153,7 @@ class Gui:
         for expense in self.controller.expenses:
             self.expense_list_box.insert(
                 tk.END,
-                f"{expense.name} {convert_price_int100_string(expense.price)} {expense.date}",
+                f"Decription --> {expense.name}, date --> {expense.date}, amount --> {expense.price/100}",
             )
 
     def min_year(self):

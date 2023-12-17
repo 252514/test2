@@ -16,7 +16,21 @@ class NewWindowGui:
         self.window.title("Bob")
         self.window.geometry("800x600")
         self.months = list(calendar.month_name[1:])
+        self.window.configure(background="#4A4A4A")
         self.years = [str(year) for year in range(1900, 2031)][::-1]
+
+        style = ttk.Style()
+        style.configure(
+            "TLabel", font=("Helvetica", 12), background="#4A4A4A"
+        )
+        style.configure(
+            "TEntry",
+            font=("Helvetica", 12),
+            fieldbackground="#666666",
+        )
+        style.configure(
+            "TButton", font=("Helvetica", 12), background="#66BB6A"
+        )
 
         self.scrollbar_horizontal = tk.Scrollbar(self.window, orient="")
 
@@ -25,7 +39,6 @@ class NewWindowGui:
             self.window,
             width=50,
             height=10,
-            foreground="white",
             yscrollcommand=self.scrollbar_vertical.set,
             xscrollcommand=self.scrollbar_horizontal.set,
         )
@@ -33,7 +46,7 @@ class NewWindowGui:
             row=0, column=3, rowspan=5, padx=10, pady=10, sticky="nsew"
         )
         self.scrollbar_vertical.config(command=self.expense_list_box_two.yview)
-        self.scrollbar_vertical.grid(row=3, column=4, sticky="ns")
+        self.scrollbar_vertical.grid(row=3, column=3, sticky="ns")
 
         self.scrollbar_horizontal.config(command=self.expense_list_box_two.xview)
         self.scrollbar_horizontal.grid(row=5, column=3, sticky="ns")

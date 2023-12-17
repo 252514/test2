@@ -5,5 +5,5 @@ from expense.expence_serializator import ExpenceSerializator
 
 
 if __name__ == "__main__":
-    gui = Gui("Expense Tracker", "1000x800")
+    gui = Gui("Expense Tracker", "600x600")
     gui.run()
