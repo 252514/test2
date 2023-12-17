@@ -1,8 +1,12 @@
 import tkinter as tk
 import os
-from datetime import datetime
 from tkinter import messagebox, ttk
 from expense.expence_analizer import ExpenseAnalizer
+from expense.helpers import (
+    check_price,
+    convert_price_int100_string,
+    convert_price_string_int100,
+)
 from tkcalendar import DateEntry
 from expense.expence_serializator import ExpenceSerializator
 from expense.expanse_controller import ExpanseController
@@ -56,7 +60,12 @@ class Gui:
         )
 
         self.expense_input_date_entry = DateEntry(
-            self.ts, width=20, foreground="white", borderwidth=2
+            self.ts,
+            width=20,
+            foreground="white",
+            borderwidth=2,
+            state="readonly",
+            date_pattern="d/m/yyyy",
         )
         self.expense_input_date_entry.grid(
             row=1, column=1, padx=10, pady=10, sticky="w"
@@ -122,20 +131,18 @@ class Gui:
         name = self.expense_input_name_entry.get()
         price = self.expense_input_price_entry.get()
         date = self.expense_input_date_entry.get()
-
         if not name or not price or not date:
             messagebox.showerror(
                 "Empty", "Error: Descripton, date or expense cannot be empty."
             )
-        elif price[0] == "-":
-            if not price[1:].isdigit():
-                messagebox.showerror("Number", "Error: You should input a number.")
-        elif not name or not price or not date:
-            messagebox.showerror(
-                "Empty", "Error: Descripton, date or expense cannot be empty."
-            )
             return
-        expense = Expense(name, int(price), date)
+        try:
+            check_price(price)
+        except Exception:
+            messagebox.showerror("Error", "Error: Wrong price")
+            return
+
+        expense = Expense(name, convert_price_string_int100(price), date)
         self.controller.add(expense)
         self.update_expense_list()
 
@@ -143,22 +150,29 @@ class Gui:
         self.expense_list_box.delete(0, tk.END)
         for expense in self.controller.expenses:
             self.expense_list_box.insert(
-                tk.END, f"{expense.name} {expense.price} {expense.date}"
+                tk.END,
+                f"{expense.name} {convert_price_int100_string(expense.price)} {expense.date}",
             )
+
+    def min_year(self):
+        self.minimum_year = 0
+        for expense in self.controller.expenses:
+            if int(expense.date) > self.minimum_year:
+                self.minimum_year = 0
+                self.minimum_year += int(expense.date)
+        return self.minimum_year
 
     def load(self):
         if os.path.isfile(self.filename):
             self.controller.expenses = self.serializator.deserializate()
             self.update_expense_list()
-        # load from file -> list
-        # self.controller.expenes + list
 
     def save(self):
         self.serializator.serializate(self.controller.expenses)
 
     def balance(self):
         balance = self.analyzer.get_balance(self.controller.expenses)
-        messagebox.showinfo("Balance", f"Your Balance is {balance}")
+        messagebox.showinfo("Balance", f"Your Balance is {balance/100}")
 
     def new_window(self):
         new_window: NewWindowGui = NewWindowGui(self.controller.expenses)
