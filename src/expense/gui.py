@@ -156,14 +156,6 @@ class Gui:
                 f"Decription --> {expense.name}, date --> {expense.date}, amount --> {expense.price/100}",
             )
 
-    def min_year(self):
-        self.minimum_year = 0
-        for expense in self.controller.expenses:
-            if int(expense.date) > self.minimum_year:
-                self.minimum_year = 0
-                self.minimum_year += int(expense.date)
-        return self.minimum_year
-
     def load(self):
         if os.path.isfile(self.filename):
             self.controller.expenses = self.serializator.deserializate()
@@ -171,6 +163,7 @@ class Gui:
 
     def save(self):
         self.serializator.serializate(self.controller.expenses)
+        messagebox.showinfo("Saved","You saved your expense")
 
     def balance(self):
         balance = self.analyzer.get_balance(self.controller.expenses)
